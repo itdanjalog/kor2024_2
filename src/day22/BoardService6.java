@@ -22,6 +22,6 @@ import java.util.Scanner;
 
 public class BoardService6 {
     public static void main(String[] args) {
-
+        // day23 에서 구현할 예정
     }
 }
