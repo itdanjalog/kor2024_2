@@ -51,7 +51,6 @@ public class BoardService5 {
                     System.out.printf("작성자 : %s , 내용 : %s \n" ,  boardList.get( index).writer , boardList.get(index).content );
                 } // for end
             }
-
         } // w end
     } // m end
 }
