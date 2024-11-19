@@ -7,7 +7,7 @@ import java.util.ArrayList;
         - 조건 : 파일 입출력을 활용하여 프로그램이 종료되고 다시 실행 했을때 영구 저장 되도록 하시오.
 
         [생각해보기]
-        1. txt 메모장는 문자열만 저장되는 윈도우 프로그램의 확장자 , txt(객체지향 X)
+        1. txt 메모장는 *문자열*만 저장되는 윈도우 프로그램의 확장자 , txt(객체지향 X)
         2. 게시물들( ArrayList<BoardDto> ) 저장를 하기 위해서는 변환이 필요하다. , java(객체지향 O)
         문제점 발견 : 서로 다른 언어/프로그램 들 간의 데이터를 주고 받을려면 형식/타입이 같으면 좋을텐데.
         - 관례적으로 사용되는 타입 : CSV , JSON , XML 파일 타입 주로 사용한다.
@@ -23,15 +23,32 @@ import java.util.ArrayList;
         2. 하나의 문자열로 필드명을 제외한 필드값들을 ,쉼표 구분하여 문자열로 변환 : "안녕하세요,유재석,1234"
 
         [ 여러개 게시물 객체가 존재 했을때 ]
-        point1 : 필드간의 구분을 ,쉼표로 한다
+        point1 : 객체내 필드간의 구분을 ,쉼표로 한다
         point2 : 객체간의 구분을 \n으로 한다.
-            예] "안녕하세요,유재석,1234\n그래안녕,강호동,4567"
+            예] 만일 게시물 2개일때 "안녕하세요,유재석,1234\n그래안녕,강호동,4567"
 
  */
 public class BoardDao {
     // 싱글톤
     private static BoardDao boardDao = new BoardDao();
-    private BoardDao(){}
+    private BoardDao(){
+
+        // 만약에 파일를 로드 하는데.. 파일이 존재하지 않으면
+            // [1] 파일 경로에 따른 파일 객체화
+        File file = new File("./src/day25/boardservice9mvc/data.txt");
+            // [2] 객체화 한 파일이 존재 하는지 확인
+        if( file.exists() ){ // - 지정한 경로의 파일이 있다.
+            // - 싱글톤(static) 이 생성될때( 프로그램이 실행될때 )
+            fileLoad(); // 파일 로드
+        }else{ // - 지정한 경로의 파일이 없다.
+            try {
+                file.createNewFile(); // .createNewFile() : 파일 생성 함수
+            }catch ( IOException e ){
+                e.printStackTrace();
+            }
+        } // else end
+    } // 생성자 end
+
     public static BoardDao getInstance(){
         return boardDao;
     }
@@ -71,19 +88,41 @@ public class BoardDao {
         catch ( IOException e ){ e.printStackTrace(); }
     }
     // =================== 영구저장 된 파일의 게시물들을 가져오는 기능 ============================= //
-    public void fileLoad( ) {
+    public void fileLoad( ) { // ( 프로그램이 실행 되었을때 1번 만 실행 ) // DAO 객체(싱글톤) 생성될때 메모장(TXT) 불러오기 한다.
         try {
             // [1] 파일 입력 객체 생성
             FileInputStream inputStream = new FileInputStream("./src/day25/boardservice9mvc/data.txt");
             // [2] 파일 용량만큼 바이트 배열 선언
             File file = new File("./src/day25/boardservice9mvc/data.txt");
-            byte[] bytes = new byte[(int) file.length()];
+            byte[] bytes = new byte[ (int) file.length()];
             // [3] 파일 입력 객체를 이용한 파일 읽어서 바이트 배열 저장
             inputStream.read(bytes);
             // [4] 읽어온 바이트 배열을 문자열(String)으로 변환
             String inStr = new String( bytes );
             // 활용과제 : 파일로 부터 읽어온 문자열의 게시물 정보들을 다시 ArrayList<BoardDto> boardDB 에 저장하시오.
-
+            // 목표 : 파일로 가져온 문자열내 저장된 여러개 게시물들을 객체화 하고 게시물객체를 리스트에 담자.
+                // "안녕하세요,유재석,1234\n그래안녕,강호동,4567"
+            // [1] 객체 구분문자(\n:임의)  , 문자열 분해 , "문자열".split("기준문자") : 문자열내 기준문자 기준으로 분해 후 배열로 반환
+                // inStr = "안녕하세요,유재석,1234\n그래안녕,강호동,4567\n"
+                // inStr.split("\n")  -> [ "안녕하세요,유재석,1234" , "그래안녕,강호동,4567" ]
+                String[] objStr = inStr.split("\n");
+            // [2] 객체내 필드 구분 문자(,:쉼표)
+            for( int i = 0 ; i <= objStr.length - 1 ; i++ ){ // 마지막 줄 제외를 하기 위해 -1
+                String obj = objStr[i]; // [3] 1개의 객체 필드 값들 가져오기
+                //  objStr = [ "안녕하세요,유재석,1234" , "그래안녕,강호동,4567" ]
+                //  objStr[0] = "안녕하세요,유재석,1234"
+                //  objStr[0].split(",")   -->   [  "안녕하세요" , "유재석" , "1234" ]
+                //  field = [  "안녕하세요" , "유재석" , "1234" ]
+                //  field[0] = "안녕하세요"
+                //  [4] 문자열로 된 필드 값들을 객체로 변환하기
+                String[] field = obj.split(",");
+                String content = field[0];
+                String writer = field[1];
+                int pwd = Integer.parseInt( field[2] ) ; // String 타입을 int 으로 변환하는 방법 , Integer.parseInt("문자열")
+                BoardDto boardDto = new BoardDto( content , writer , pwd );
+                // [5] 리스트에 담기
+                boardDB.add( boardDto );
+            }
         }catch ( FileNotFoundException e ){ e.printStackTrace();}
         catch ( IOException e ){ e.printStackTrace(); }
     }
