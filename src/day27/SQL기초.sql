@@ -89,6 +89,44 @@ select * from board; # 테이블은 존재하지만 아직 데이터가 없다
 drop table if exists board; # 테이블 삭제 
 
 # 테이블 예제2 
+drop database if exists mydb1120;	# 1. 데이터베이스 가 존재하면 삭제 
+create database mydb1120;			# 2. 데이터베이스 생성 
+show databases; 					# 3. 데이터베이스 목록 
+use mydb1120; 						# 4. 데이터베이스 활성화/사용 
+drop table if exists member;		# 5. 테이블 이 존재하면 삭제 
+# 6. 테이블 생성 : 테이블명( 속성명 속성타입 , 속성명 속성타입 , 속성명 속성타입 )
+create table member(			
+	정수필드1 tinyint ,  정수필드2 smallint , 정수필드3 mediumint ,   정수필드4 int ,  정수필드5 bigint , 
+    실수필드1 float , 실수필드2 double , 실수필드3 decimal , 
+    날짜필드 date , 날짜시간필드 datetime , 시간필드 time ,
+    문자열필드1 char(100) , 문자열필드2 varchar(100) , 문자열필드3 text , 문자열필드4 longtext , 
+    논리필드 bool # 마지막에는 ,(쉼표) 넣지 않는다. 
+); 					
+show tables; # 7. 테이블 목록 보기 
+select * from member; # 8. 지정한 테이블의 레코드 보기 # 현재 레코드가 없고 테이블만 생성된 상태 
+
+
+/* [SQL과제] 키오스크 개발 - 필요한 데이터베이스 구축 하기 
+		- 참고 영상 : https://www.youtube.com/watch?v=ksuYwD1oC3A
+        - 요구 사항 
+			1. 여러개 카테고리 중에 하나의 카테고리를 선택하여 카테고리별 제품들을 출력
+            2. 해당 제품을 선택하여 수량 입력받아 주문 처리 - 단) 한번 주문의 여러개 제품을 주문 할수 있다.
+            3. 주문번호를 받아서 대기한다.
+		- 메모리 설계 필수 필드 속성 
+			1. 카테고리명 2. 제품명 3.가격 4.주문수량 5.주문날짜
+		- 핵심 : 여러 테이블 구성 할때는 테이블간의 데이터 중복을 최소화 한다.
+		- 제출 : 위 주제에 따른 데이터베이스 와 테이블 생성을 하기 위한 SQL 제출 
+        itdanja@kakao.com
+*/
+
+
+			
+
+
+
+
+
+
 
 
 
