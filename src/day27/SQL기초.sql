@@ -10,7 +10,7 @@
         - ctrl+shitf+enter( 번개모양의 I 없는 ) : 현재 sql파일의 모든 sql 실행 
     4. 실행 결과는 하단에 [Result Grid] 창에서 확인 가능
 */
-# [1] db server 내 모든 테이블 확인 # 데이터베이스란? 표/테이블 , 기본 테이블 4개의 테이블명이 출력된다.
+# [1] db server 내 모든 데이터베이스 확인 # 데이터베이스란? 표/테이블 , 기본 테이블 4개의 테이블명이 출력된다.
 show databases;
 # [2] db server local path 확인 
 show variables like 'datadir';
