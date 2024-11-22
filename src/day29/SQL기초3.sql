@@ -30,6 +30,7 @@ create table board(
     -- 관례적(무조건x일반적o)으로 테이블마다 1개 이상의 pk(기본키) 필수 , 
     -- (주민등록번호o-사람이름x)/(학번o/학생이름x)/(제품번호o/제품명x)/(ISBNO/도서명x)
 );
+select * from board;
 
 # 5. DML : 데이터 조작 어 , 코테/면접 <------ 
 # -- (1) 면접준비 : https://school.programmers.co.kr/learn/challenges?tab=sql_practice_kit
