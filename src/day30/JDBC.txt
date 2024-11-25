@@ -37,8 +37,15 @@
                 Connection conn = DriverManager.getConnection( mariaDB )
                 ----> 서로 다른 각 DB 회사에서 제공하는 클래스(만든사람이 다르므로 클래스는 다르다.) 는 다르다.
                 하지만 하나의 인터페이스로 서로 다른 회사의 클래스를 사용/조작 한다.
-                1.
-        2. PreparedStatement 인터페이스
+            (1) PreparedStatement ps = conn.prepareStatement( SQL문자열 ); : 기재한 SQL를 매개변수로 전달하면 기재한 SQL를 조작/기능/메소드 제공 객체 반환 함수
+
+        2. PreparedStatement 인터페이스 : 기재된 SQL를 조작/메소드 제공하는 인터페이스
+            (1) ps.setXXX( ? ,  value ) , 현재 기재된 ?에 매개변수를 대입하는 함수
+                -> XXX : 데이터타입
+                -> ? : 기재된 SQL내 ?의 순서번호
+                -> value : 앞 매개변수 ?에 대입할 값
+
+            (2) ps.executeUpdate() , 현재 기재된 SQL를 실행하는 함수
 
         3. ResultSet 인터페이스
 
