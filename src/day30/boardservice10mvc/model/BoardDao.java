@@ -1,9 +1,6 @@
 package day30.boardservice10mvc.model;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class BoardDao {
@@ -30,9 +27,6 @@ public class BoardDao {
 
     public static BoardDao getInstance(){  return boardDao; }
 
-    // 여러개 게시물 저장하는 리스트
-    ArrayList<BoardDto> boardDB = new ArrayList<>();
-
     // 1. 게시물 등록 접근 함수
     public boolean boardWrite( BoardDto boardDto){
         try {
@@ -56,14 +50,44 @@ public class BoardDao {
         }
         // 5. 실패 또는 오류 발생시 false 반환
         return false;
-    }
+    } // m end
 
-    // 2. 게시물 출력 접근 함수
+    // 2. 전체 게시물 출력 접근 함수
     public ArrayList<BoardDto> boardPrint( ){
-        return boardDB;
-    }
+        ArrayList<BoardDto> list = new ArrayList<>(); // -- 조회된 레코드들을 객체화 해서 저장할 리스트객체 선언
+        try {
+            String sql = "select * from board";  // 1. SQL 작성
+            PreparedStatement ps = conn.prepareStatement(sql); // 2. SQL 기재
+            // 3. SQL 조작
+            // 4. SQL 실행 , executeQuery() : sql 실행 결과 조회된 SQL 결과 조작하는 resultSet 객체 반환
+            ResultSet rs = ps.executeQuery();
+            // 5. SQL 결과
+            while( rs.next() ){ // while( 조건 ){} : 반복문  , rs.next() : 조회 결과 에서 다음 레코드 이동 함수
+                // 만약에 결과 레코드가 3개 존재하면 rs.next() 3번 실행 된다.
+                // [해석] 조회 결과 첫번째 레코드 부터 마지막 레코드 까지 하나씩 레코드 이동
+                // 6. 각 레코드를 읽어서 각 필드별 데이터 호출  , rs.getXXX( "필드명" ) : 지정한 필드명의 값 타입에 맞게 값 반환
+                int num = rs.getInt("num");           // 현재 조회중인 레코드의 게시물번호(num)필드 값 호출
+                String content = rs.getString("content");    // 현재 조회중인 레코드의 게시물내용(content)필드 값 호출
+                String writer = rs.getString("writer");     // 현재 조회중인 레코드의 게시물작성자(writer)필드 값 호출
+                int pwd = rs.getInt("pwd");           // 현재 조회중인 레코드의 게시물비밀번호(pwd)필드 값 호출
+                // 7. 각 레코드의 호출된 필드값들을 객체화 --> DTO 생성
+                BoardDto boardDto = new BoardDto( content , writer , pwd );
+               // 8. 1개 레코드를 DTO 객체로 변환된 DTO를 리스트에 저장
+                list.add( boardDto );
+            } // w end   // - 반복문 1번 실행에  레코드 1개 를 dto 로 변환
+        }catch ( SQLException e ){ e.getMessage();  System.out.println("[ 게시물 출력시 예외발생]"); }
+            // 9. 구성한 리스트 객체 반환
+            return list;
+    } // m end
+} // class end
 
-}
+
+/* 예] 조회 결과가 아래와 같을때 예시
+   num  content         writer      pwd     <------ rs: 인터페이스가 조작할수 있다.  rs.next() : 다음 레코드 이동
+   1    자바에서작성      유재석       1234    <-(rs.next())
+   2    안녕db           강호동       4567    <-(rs.next())
+   3    하하하하하        하하         7897     <-(rs.next())
+*/
 
 
 
