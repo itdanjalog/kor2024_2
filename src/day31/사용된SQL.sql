@@ -29,15 +29,11 @@ select * from board;
 # 6. 특정 게시물 삭제 
 # 게시물번호가 1번이면 레코드/행/가로 단위 삭제 한다.
 delete from board where num = 1; 
-# jdbc : delete from board where num = ? ;						# ?는 (java)매개변수가 들어갈 자리  (1개) 
+# jdbc : delete from board where num = ? ;											# ?는 (java)매개변수가 들어갈 자리  (1개) 
 
 # 7. 특정 게시물의 내용 수정 
 # 게시물번호가 1번 이면 게시물내용을 '수정내용입니다.' 수정 한다. 
 update board set content = '수정내용입니다.' where num = 1 ;
-# jdbc : update board set content = ? where num = ? ; 			# ?는 (java)매개변수가 들어갈 자리  (2개) 
-
-
-
-
+# jdbc : update board set content = ? where num = ? ; 								# ?는 (java)매개변수가 들어갈 자리  (2개) 
 
 
