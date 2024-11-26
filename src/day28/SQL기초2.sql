@@ -13,7 +13,7 @@
 		1. show databases;								: db server 내 모든 데이터베이스를 확인 
 		2. show variables like 'datadir'				: db server local path 확인 	
 		3. create database 데이터베이스명					: db server 내 db 생성 
-		4. drop database 데이터베이스명						: db server 내 db 삭제 
+		4. drop database 데이터베이스명					: db server 내 db 삭제
 			- drop database if exists 데이터베이스명 		: 만일 db가 존재하면 삭제 
 		5. use 데이터베이스명								: db server 내 여러 db중에 사용 활성화
 		6. create table 테이블명( 속성명 타입 , 속성명 타입 , 속성명 타입 ) : 활성화된 db에서 테이블/표 생성한다.
@@ -24,7 +24,7 @@
 	[ 데이터 타입 ] : 테이블 생성시 필드/속성 의 데이터 타입 
 		[정수]	TINYINT , SMALLINT , MEDIUMINT , INT , BIGINT
         [실수]	FLOAT , DOUBLE , DECIMAL(문자)
-        [문자]	CHAR( ) , VARCHAR( )
+        [문자]	CHAR( ) , VARCHAR( ) , longText(4G)
         [날짜/시간] DATE , TIME , DATETIME
         [논리]	BOOL
 */
