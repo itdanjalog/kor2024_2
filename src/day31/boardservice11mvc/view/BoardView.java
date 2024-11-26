@@ -21,7 +21,7 @@ public class BoardView {
 
     public void mainPage(){ // view 시작 함수
         while (true){
-            System.out.print("1.게시물등록 2.게시물출력 : ");
+            System.out.print("1.게시물등록 2.게시물출력 3.게시물삭제 4.게시물수정 : ");
             int choose = scan.nextInt();
             if( choose == 1 ){
                 boardWrite();
@@ -30,7 +30,10 @@ public class BoardView {
                 boardPrint();
             }else if( choose == 3 ){
                 boardDelete();
+            }else if( choose == 4 ){
+                boardUpdate();
             }
+
         } // w end
     } // m end
 
@@ -74,6 +77,24 @@ public class BoardView {
         if( result ){  System.out.println("게시물 삭제 완료"); }
         else{System.out.println("게시물 삭제 실패[ 존재하지 않는 게시물 또는 관리자에게 문의 ]");}
     } // m end
+
+    // 4. 게시물 수정 view 함수
+    void boardUpdate() {
+        // 1. 입력
+        System.out.println("수정할 게시물 번호 : ");
+        int updateNum = scan.nextInt();
+        System.out.println("수정할 게시물 내용 : ");
+        scan.nextLine();
+        String updateContent = scan.nextLine();
+        // - 수정 게시물 객체
+        BoardDto updateDto = new BoardDto( updateNum , updateContent );
+        // 2. controller
+        boolean result = BoardController.getInstance().boardUpdate( updateDto ) ;
+        // 3. 결과
+        if( result ){ System.out.println("게시물 수정 성공");}
+        else{  System.out.println("게시물 수정 실패 : 존재하지 않는 게시물 또는 관리자 에게 문의 "); }
+    } // m end
+
 } // class end
 
 

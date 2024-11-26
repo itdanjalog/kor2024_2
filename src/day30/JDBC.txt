@@ -45,8 +45,10 @@
                 -> ? : 기재된 SQL내 ?의 순서번호
                 -> value : 앞 매개변수 ?에 대입할 값
 
-            (2) ps.executeUpdate() , 현재 기재된 SQL를 실행하는 함수
-            (3) ResultSet rs = ps.executeQuery() , 현재 기재된 SQL를 실행하고 조회된 결과를 반환 함수.
+            (2) ps.executeUpdate() , 현재 기재된 SQL를 실행하는 함수 , insert , delete , update
+                int result = ps.executeUpdate() , SQL 실행후 업데이트한 레코드 수 반환 , ( 등록한 레코드수 , 삭제한 레코드수 , 수정할 레코드수 ) 반환
+
+            (3) ResultSet rs = ps.executeQuery() , 현재 기재된 SQL를 실행하고 조회된 결과를 반환 함수 , select
 
         3. ResultSet 인터페이스 : 실행된 SQL 조회 결과를 조작 하는 인터페이스
             (1) rs.next() : 조회된 결과의 다음 레코드 이동 함수

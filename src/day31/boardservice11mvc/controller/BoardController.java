@@ -44,9 +44,25 @@ public class BoardController {
         boolean result  = BoardDao.getInstance().boardDelete( deleteNum );
         // 4. dao 에게 받은 결과를 view 전달한다. ( controller 중계 )
         return result;
-    }
+    } // m end
 
+    // 4. 게시물 수정 controller 함수
+    public boolean boardUpdate( BoardDto updateDto ){
+        // view에게 받은 데이터를 dao에게 전달
+        boolean result = BoardDao.getInstance().boardUpdate( updateDto );
+        // dao 에게 받은 결과 값을 view에게 전달
+        return result;
+    }
 } // class end
+
+
+
+
+
+
+
+
+
 
 
 

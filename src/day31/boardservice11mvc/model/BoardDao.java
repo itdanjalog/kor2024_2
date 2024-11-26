@@ -85,12 +85,41 @@ public class BoardDao {
 
     // 3. 게시물 삭제 함수
     public boolean boardDelete( int deleteNum ){
-
-        // 추후에 작업할 예정
-        return false;
-
+        try {
+            // 1. SQL 작성
+            String sql = "delete from board where num = ? ";
+            // 2. SQL 기재 준비
+            PreparedStatement ps = conn.prepareStatement(sql);
+            // 3. 기재 준비 된 SQL 조작 , 기재된 sql 매개변수 대입
+            ps.setInt(1, deleteNum); // 기재된 sql 내 첫번째 ? 에 'deleteNum' 삭제할 게시물번호 대입한다.
+            // 4. SQL 실행 , // 5. SQL 실행 결과
+            int result = ps.executeUpdate(); // delete 실행후 delete 레코드 개수를 반환 , result(삭제된 레코드수)
+            // 6. 메소드 반환
+            if (result == 1) {
+                return true; // 삭제 성공
+            }
+        }catch ( SQLException e ){ e.getMessage(); }
+        return false; // 삭제 실패 : sql 오류 또는 삭제할번호 없을때 오류
     } // m end
 
+    // 4. 게시물 수정 dao 함수
+    public boolean boardUpdate( BoardDto updateDto ){
+        try {
+            // 1. sql 작성
+            String sql = "update board set content = ? where num = ? ";
+            // 2. sql 기재 할 준비한다.
+            PreparedStatement ps = conn.prepareStatement(sql);
+            // 3. 기재된 sql 조작한다 .
+            ps.setString(1, updateDto.getContent());
+            ps.setInt(2, updateDto.getNum());
+            // 4. 기재된 sql 실행 // 5. 실행 결과
+            int result = ps.executeUpdate(); // 수정SQL 결과 변화가 있는 레코드수 반환
+            // 6. 메소드 반환
+            // 만약에 레코드 변화가 1개 있으면 수정 성공
+            if (result == 1) {     return true;   }
+        }catch ( SQLException e ){   e.getMessage();  }
+        return false;
+    } // m end
 } // class end
 
 
