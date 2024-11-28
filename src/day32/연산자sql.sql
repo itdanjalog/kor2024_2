@@ -81,7 +81,42 @@ select * from member where mname like '__핑크';	# 'mname' 필드값이 '핑크
 select * from member where mname like '_이_';	# 'mname' 필드값이 두번째 글자가 '이' 세글자 인 레코드 조회 
 select * from member where mphone1 = '';		# 'mphone1' 필드값이 ''공백인 레코드 조회
 select * from member where mphone1 is null;		# ''공백 vs ' '띄어쓰기공백 vs null 모두 다른 데이터로 식별된다. 그러므로 null 조회시 is null
-select * from member where mphone1 is not null 	# 'mphone1' 필드값이 null 아닌 레코드 조회 
+select * from member where mphone1 is not null ;	# 'mphone1' 필드값이 null 아닌 레코드 조회 
+
+select mnumber + 3 as 더하기 , mnumber - 3 as 빼기 , mnumber * 3 , 
+		mnumber / 3 as 나누기 , mnumber div 3 as 몫 , mnumber mod 3 as 나머지
+from member;
+
+# [5] 정렬  , 조회 결과의 레코드를 특정한 필드 기준으로 정렬 
+# order by 필드명 asc[생략가능]		: 지정한 필드명기준으로 레코드를 오름차순 정렬 , 작은수 -> 큰수 , 과거날짜 -> 최근날짜 
+# order by 필드명 desc			: 지정한 필드명기준으로 레코드를 내림차순 정렬 , 큰수 -> 작은수 , 최근날짜 -> 과거날짜
+# order by 필드명1 asc/desc , 필드명2 asc/desc : 정렬기준이 2개 이상일때 ,(쉼표) 로 구분 하기  
+select * from member order by mdebut asc;	# 'mdebut' 필드명 기준으로 오름차순 , 과거날짜(작은수) -> 최신날짜(큰수)
+select * from member order by mdebut desc;	# 'mdebut' 필드명 기준으로 내림차순 , 최신날짜 -> 과거날짜  
+# 주의할점 : 정렬 기준이 2개 이상일때 : 첫번째 필드 정렬 후 첫번째 필드내 *동일한 값이 있을경우 동일한 값* 중에서 두번째 정렬 실행 
+select * from member order by maddr desc , mdebut asc ; # 먼저 주소별 정렬 후 동일한 주소가 존재하면 데뷔날짜로 정렬한다.
+
+# [6] 제한 , 조회 결과의 레코드 수 제한 
+# limit 레코드수 
+# limit 시작레코드번호(0~) , 개수 
+select * from member limit 2;	# 조회 결과의 레코드에서 위에서부터 2개만 조회 제한  
+select * from member limit 0 , 3; # 조회 결과의 레코드에서 0(첫번째)레코드 부터 3개만 조회 제한 
+select * from member limit 2 , 2; # 조회 결과의 레코드에서 2(세번째)레코드 부터 2개만 조회 제한 
+select * from member order by mheight desc limit 3 ;	# 'mheight' 필드 기준으로 내림차순 하고 3개만 조회 제한 # 'mheight' 필드 상위 3개 
+
+# [7] 필드값이 중복 인 레코드 제거 
+# distinct
+select maddr from member; # 주소 필드의 모든 레코드를 조회
+select distinct maddr from member; # 주소 필드의 모든 레코드를 조회하는데 주소가 중복이면 중복된 레코드는 제거 
+
+# [8] 동시에 여러개 절 작성할때 순서 # select -> from -> where -> order by -> limit  
+# select 필드명 , 필드명 from 테이블명 where 조건절 order by 정렬 limit 레코드제한 
+# select * from 테이블명 where 조건절 order by 정렬 limit 레코드제한 
+# select * from member where maddr = '서울'; # 주소가 '서울'인 레코드 조회
+select * from member where maddr = '서울' order by mdebut desc; # 주소가 '서울'인 레코드를 데뷔일 기준으로 내림차순 조회
+select * from member where maddr = '서울' order by mdebut desc limit 0 , 2 ; 
+# 주소가 '서울'인 레코드를 데뷔일 기준으로 내림차순 조회 결과 첫번째레코드부터 2개만 조회 
+
 /*연산자 
 	1. 비교연산자 
 		1.같다 : 필드명 = 비교값 , 지정한 필드명의 값이 비교값과 같으면 true 
@@ -91,7 +126,7 @@ select * from member where mphone1 is not null 	# 'mphone1' 필드값이 null �
 		1. 이면서/면서/이고/그리고 :  조건1 and 조건2 
 		2. 이거나/또는/하나라도   :  조건1 or 조건2
 		3. 부정/반대			: not 조건		, 조건결과의 반대 , true -> false , false -> true 
-	4. 기타연산자 
+	3. 기타연산자 
 		- 필드명 between 시작값 and 끝값 	: 지정한 필드명의 값이 시작값과 끝값 사이이면 true 
 		- 필드명 in( 값1 , 값2 , 값3 ) 	: 지정한 필드명의 값이 in 안에 있는 값이 하나라도 존재하면 true
         - 필드명 like 패턴 : 지정한 필드명의 값이 패턴과 일치하면 true
@@ -100,7 +135,21 @@ select * from member where mphone1 is not null 	# 'mphone1' 필드값이 null �
             2. _ : _개수만큼 문자수 대응 		, 김_ : 김으로 시작하는 두글자인 문자열 
 		- 필드명 is null	: 지정한 필드명의 값이 null 이면 true 
         - 필드명 is not null : 지정한 필드명의 값이 null 이 아니면 true 
+	4. 산술연산자 
+		필드명 + 값 : 지정한 필드값에 값 더하기
+        필드명 - 값 : 지정한 필드값에 값 빼기 
+        필드명 * 값 : 지정한 필드값에 값 곱하기 
+        필드명 / 값 : 지정한 필드값에 값 나누기 
+        필드명 div 값 : 지정한 필드값에 값 를 나눈 몫 
+        필드명 mod 값 : 지정한 필드값에 값 를 나눈 나머지
+    5. 키워드 
+		1. as 별칭				: select 필드명 as 필드명별칭 from 테이블명 테이블별칭  
+        2. where 조건절 			: select * from 테이블명 where 조건필드 = 조건값 
+        3. order by 정렬			: select * from 테이블명 order by 정렬필드 [asc/desc]
+        4. limit 레코드제한 		: select * from 테이블명 limit 시작레코드번호 , 개수 
+        5. distinct 중복제거 		: select distinct 필드명 from 테이블명 
 */
+
 
 
 
