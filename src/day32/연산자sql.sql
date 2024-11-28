@@ -117,11 +117,61 @@ select * from member where maddr = '서울' order by mdebut desc; # 주소가 '�
 select * from member where maddr = '서울' order by mdebut desc limit 0 , 2 ; 
 # 주소가 '서울'인 레코드를 데뷔일 기준으로 내림차순 조회 결과 첫번째레코드부터 2개만 조회 
 
-/*연산자 
+# [9] 그룹 
+# GROUP BY 그룹필드 HAVING 그룹조건 
+select * from buy; # 구매내역 테이블 'buy'
+select bamout from buy; # 구매내역 테이블의 구매수량(bamout) 필드
+
+# [10] 수학 집계 함수
+# sum( 필드명 ) : 해당 필드의 데이터 합계  
+# avg( 필드명 ) : 해당 필드의 데이터 평균 
+# min( 필드명 ) : 해당 필드의 데이터 최솟값 
+# max( 필드명 ) : 해당 필드의 데이터 최댓값 
+# count( 필드명 ) : 해당 필드의 데이터 수 , null 포함 X 
+# count( * ) : 전체 레코드수 , null 포함 o
+select sum( bamout ) from buy;	# 모든 레코드의 (전체) 구매수량(bamout) 필드 합계 
+select avg( bamout ) from buy;	# 모든 레코드의 (전체) 구매수량(bamout) 필드 평균 
+select min( bamout ) from buy;	# 모든 레코드의 (전체) 구매수량 필드 최솟값 
+select max( bamout ) from buy;  # 모든 레코드의 (전체) 구매수량 필드 최댓값 
+select count( bgname ) from buy; # 모든 레코드의 bgname(그룹명) 데이터 개수 , null 값을 제외한 필드 레코드 수
+select count( * ) from buy;	# 모든 레코드의 구매수량 레코드 수 
+# 그룹 별 집계함수 사용.
+select mid , bamout from buy;							# mid(회원아이디) , bamout(구매수량) 필드를 표시하는 모든 레코드 조회 
+select sum(bamout) from buy;							# 다른 필드 없이 집계함수 필드만 사용할 경우. 전체 집계 , 그룹 필요없다. 
+# select mid , sum(bamout) from buy;					# 오류 : sum()집계함수 이므로 다른 필드와 출력시 집계기준 필요.. 집계기준=그룹기준 
+select mid , sum(bamout) from buy group by mid; 		# 회원아이디 별 구매수량 필드 합계 
+select sum( bamout * bprice ) as 총구매금액 from buy;		# 전체 레코드의 총구매금액 조회
+select mid as 회원아이디 , sum( bamout * bprice ) as 총구매금액 from buy group by mid;	# 회원아이디별 총구매금액 조회 
+select mid  , avg( bprice ) from buy group by mid;		# 회원아이디별 구매금액필드의 평균 조회
+select mid , count( mphone1 ) from member group by mid;	# 회원아이디별 연락처가 있는 회원수 
+select mid , count( * ) from buy group by mid;			# 회원아이디별 레코드 수 
+  
+# [11] HAVING 그룹조건 
+# where (일반조건) : 그룹전  vs having(그룹조건) : 그룹후 
+# 회원아이디별 총구매금액이 1000 초과 인 레코드 조회
+select mid , sum( bprice * bamout ) from buy group by mid having sum( bprice * bamout) > 1000;	
+
+# 오류 : sum 집계 이후에 결과 이므로 일반 where절 사용불가능 
+# select mid , sum( bprice * bamout ) from buy where sum( bprice * bamout) > 1000 group by mid; 
+
+# select mid , avg( bprice ) from buy;	# 오류?? 집계함수 사용시 다른 필드와 같이 조회시 집계기준 = 그룹기준 
+select mid , avg( bprice ) from buy where bamout > 2 group by mid; # 구매수량이 2개 초과 인 레코드 에서 회원아이디별 구매금액 평균 조회 
+# 구매수량이 2개 초과 인 레코드 에서 회원아이디별 구매금액 평균이 50 이상인 레코드 조회  
+select mid , avg( bprice ) from buy where bamout > 2 group by mid having avg(bprice) >= 50;
+# 구매수량이 2개 초과 인 레코드 에서 회원아이디별 구매금액 평균이 50 이상인 레코드 조회 , 회원아이디별 내림차순으로 정렬   
+select mid , avg( bprice ) from buy where bamout > 2 group by mid having avg(bprice) >= 50 order by mid desc;
+# 구매수량이 2개 초과 인 레코드 에서 회원아이디별 구매금액 평균이 50 이상인 레코드 조회 , 회원아이디별 내림차순으로 정렬 후 첫번째 레코드에서 1개만 제한 조회
+select mid , avg( bprice ) from buy where bamout > 2 group by mid having avg(bprice) >= 50 order by mid desc limit 0 , 1;
+
+
+/*
 	1. 비교연산자 
 		1.같다 : 필드명 = 비교값 , 지정한 필드명의 값이 비교값과 같으면 true 
 		2.이하 : 필드명 <= 비교값 , 지정한 필드명의 값이 비교값 보다 이하 이면 true 
 		3.이상 : 필드명 >= 비교값 , 지정한 필드명의 값이 비교값 보다 이상 이면 true 
+        4.초과 : 필드명 > 비교값  
+        5.미만 : 필드명 < 비교값 
+        6.다르다 : 필드명 != 비교값 
 	2. 관계연산자
 		1. 이면서/면서/이고/그리고 :  조건1 and 조건2 
 		2. 이거나/또는/하나라도   :  조건1 or 조건2
@@ -129,12 +179,12 @@ select * from member where maddr = '서울' order by mdebut desc limit 0 , 2 ;
 	3. 기타연산자 
 		- 필드명 between 시작값 and 끝값 	: 지정한 필드명의 값이 시작값과 끝값 사이이면 true 
 		- 필드명 in( 값1 , 값2 , 값3 ) 	: 지정한 필드명의 값이 in 안에 있는 값이 하나라도 존재하면 true
-        - 필드명 like 패턴 : 지정한 필드명의 값이 패턴과 일치하면 true
+		- 필드명 like 패턴 : 지정한 필드명의 값이 패턴과 일치하면 true
 			- 패턴 
             1. % : 모든 문자수 대응 			, 김% : 김으로 시작하는 문자열 
             2. _ : _개수만큼 문자수 대응 		, 김_ : 김으로 시작하는 두글자인 문자열 
 		- 필드명 is null	: 지정한 필드명의 값이 null 이면 true 
-        - 필드명 is not null : 지정한 필드명의 값이 null 이 아니면 true 
+		- 필드명 is not null : 지정한 필드명의 값이 null 이 아니면 true 
 	4. 산술연산자 
 		필드명 + 값 : 지정한 필드값에 값 더하기
         필드명 - 값 : 지정한 필드값에 값 빼기 
@@ -144,10 +194,23 @@ select * from member where maddr = '서울' order by mdebut desc limit 0 , 2 ;
         필드명 mod 값 : 지정한 필드값에 값 를 나눈 나머지
     5. 키워드 
 		1. as 별칭				: select 필드명 as 필드명별칭 from 테이블명 테이블별칭  
-        2. where 조건절 			: select * from 테이블명 where 조건필드 = 조건값 
-        3. order by 정렬			: select * from 테이블명 order by 정렬필드 [asc/desc]
-        4. limit 레코드제한 		: select * from 테이블명 limit 시작레코드번호 , 개수 
-        5. distinct 중복제거 		: select distinct 필드명 from 테이블명 
+        2. distinct 중복제거 		: select distinct 필드명 from 테이블명 
+        
+        3. where 조건절 			: select * from 테이블명 where 조건필드 = 조건값 
+        4. group by 그룹절 		: select 필드명 from 테이블명 group by 그룹필드명	, 
+								  select 필드명 , 집계함수(필드명) from 테이블명 group by 그룹필드명
+        5. having 그룹조건			: select 필드명 from 테이블명 where 일반조건 group by 그룹필드명 having 그룹조건 
+									select 필드명 , 집계함수(필드명) from 테이블명 where 일반조건 group by 그룹필드명 having 그룹조건 
+        6. order by 정렬			: select * from 테이블명 order by 정렬필드 [asc/desc]
+        7. limit 레코드제한 		: select * from 테이블명 limit 시작레코드번호 , 개수 
+        
+	6. 집계함수 
+		sum( 필드명 ) : 해당 필드의 데이터 합계  
+		avg( 필드명 ) : 해당 필드의 데이터 평균 
+		min( 필드명 ) : 해당 필드의 데이터 최솟값 
+		max( 필드명 ) : 해당 필드의 데이터 최댓값 
+		count( 필드명 ) : 해당 필드의 데이터 수 , null 포함 X 
+		count( * ) : 전체 레코드수 , null 포함 o
 */
 
 
