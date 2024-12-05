@@ -111,7 +111,7 @@ public class BoardDao {
             PreparedStatement ps = conn.prepareStatement(sql);
             // 3. 기재된 sql 조작한다 .
             ps.setString(1, updateDto.getContent());
-            ps.setInt(2, updateDto.getNum());
+            ps.setInt(2, updateDto.getNum() );
             // 4. 기재된 sql 실행 // 5. 실행 결과
             int result = ps.executeUpdate(); // 수정SQL 결과 변화가 있는 레코드수 반환
             // 6. 메소드 반환
