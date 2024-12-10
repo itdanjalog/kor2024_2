@@ -43,4 +43,54 @@
         - autoplay      : 오디오/비디오 자동 실행 , *브라우저에 정책에 따라 사용이 불가능.
         - muted         : 음소거 와 자동실행은 같이 사용 가능.
 
+14. <form> </form> : 폼 안에 있는 입력상자들의 데이터를 (JAVA)전송 기능 내장
+15. <input /> : 입력 상자
+    - type 속성                  : 입력상자의 종류
+    1. type = "text"            : 문자열 입력상자 , 기본값
+    2. type = "password"        : 가려진 문자열 입력상자 , 패스워드
+    3. type = "date"            : 날짜 입력 상자
+    4. type = "datetime-local"  : 날짜/시간 입력 상자
+    5. type = "file"            : 첨부파일 입력 상자
+    6. type = "radio"           : 원형 체크 입력 상자 , 단일선택
+    7. type = "checkbox"        : 네모 체크 입력 상자 , 복수선택
+        - name속성의 값을 동일하게 해서 서로다른 input들을 그룹하기.
+    8. type = "button"          : 버튼(클릭) 입력 상자
+        - <input type="button" value="가입버튼1">
+        - <button type="button"> 가입버튼2 </button>
+    9. type = "submit"          : 폼 전송 버튼 (입력상자)
+    10. type = "reset"          : 폼 안에 있는 입력상자 모두 초기화 버튼
+
+    - value 속성 : 입력상자에 입력된 데이터를 갖는 속성
+        value="유재석"
+    - readonly 속성 : 읽기모드 속성 적용 입력상자
+        readonly="true"
+    - placeholder 속성 : 입력 전에 가이드라인 텍스트 , 입력값이 존재하면 보이지 않는다.
+    - maxlength 속성 : 입력상자의 최대 입력 문자수
+        maxlength="5"
+    - disabled 속성 : 입력상자 사용금지, 클릭 조차 막기.
+        disabled="true"
+    - name 속성 : 마크업들이 갖는 식별(선택자) 이름
+        name = "가입경로"
+
+16. <textarea rows="가로수" cols="세로수"> </textarea> : 긴글 텍스트 입력 상자
+17  <select ></select> : 목록상자
+18.  <option> </option>  항목
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
